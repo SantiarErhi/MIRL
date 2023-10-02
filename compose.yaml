@@ -1,0 +1,59 @@
+services:
+  postgres:
+    image: postgis/postgis:15-3.4
+    volumes:
+      - postgres-15-data:/var/lib/postgresql/data
+    restart: unless-stopped
+    environment:
+      POSTGRES_PASSWORD: ultimatelysecure
+    ports:
+      - 9876:5432
+    networks:
+      mirl:
+        aliases:
+          - mirl-db
+  postgres-keycloak:
+    build:
+      dockerfile: docker/keycloak-postgres.Dockerfile
+    volumes:
+      - postgres-15-keycloak-data:/var/lib/postgresql/data
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ultimatelysecure
+    ports:
+      - 8765:5433
+    networks:
+      mirl:
+        aliases:
+          - keycloak-db
+  keycloak:
+    image: quay.io/keycloak/keycloak:22.0.3
+    environment:
+      KC_DB: postgres
+      KC_DB_URL_PORT: 5433
+      KC_DB_URL_HOST: keycloak-db
+      KC_DB_USERNAME: postgres
+      KC_DB_SCHEMA: public
+      KC_DB_PASSWORD: ultimatelysecure
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+      # Uncomment the line below if you want to specify JDBC parameters. The parameter below is just an example, and it shouldn't be used in production without knowledge. It is highly recommended that you read the PostgreSQL JDBC driver documentation in order to use it.
+      #JDBC_PARAMS: "ssl=true"
+    ports:
+      - 8080:8080
+    command:
+      - start-dev
+    depends_on:
+      - postgres-keycloak
+    networks:
+      mirl:
+        aliases:
+          - keycloak
+volumes:
+  postgres-15-data:
+  postgres-15-keycloak-data:
+networks:
+  mirl:
+    enable_ipv6: false
+

@@ -1,0 +1,62 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+                   xmlns:pro="http://www.liquibase.org/xml/ns/pro"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-4.6.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
+    <changeSet id="1" author="Slobodian Sviatoslav">
+        <sql>CREATE TYPE event_tpe AS ENUM ('public', 'private')</sql>
+        <createTable tableName="event">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="event_name" type="varchar(70)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="event_type" type="event_tpe">
+                <constraints nullable="false"/>
+            </column>
+            <column name="start_datetime" type="time with time zone">
+                <constraints nullable="false"/>
+            </column>
+            <column name="end_datetime" type="time with time zone">
+                <constraints nullable="false"/>
+            </column>
+            <column name="photos" type="text[]">
+                <constraints nullable="false"/>
+            </column>
+            <column name="geolocation" type="point">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="text">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_at" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_limit" type="int"/>
+        </createTable>
+        <createTable tableName="user">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="full_name" type="varchar(80)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="email" type="varchar(90)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="email_confirmed" type="boolean">
+                <constraints nullable="false"/>
+            </column>
+            <column name="phone_number" type="varchar(16)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="phone_number_confirmed" type="boolean">
+                <constraints nullable="false"/>
+            </column>
+            <column name="birthday" type="date"/>
+
+        </createTable>
+    </changeSet>
+</databaseChangeLog>
