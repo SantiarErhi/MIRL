@@ -1,0 +1,31 @@
+### SPRING WEB SERVER CONFIG ###
+server:
+  connection-timeout: 5000
+  port: 8082
+
+### SPRING DATASOURCE CONFIG ###
+spring:
+  datasource:
+    url: ${MIRL_DB_URL}
+    driver-class-name: ${MIRL_DB_DRIVER_CLASS_NAME}
+    username: ${MIRL_DB_USERNAME}
+    password: ${MIRL_DB_PASSWORD}
+  jpa:
+    properties:
+      hibernate:
+        jdbc:
+          time_zone: UTC
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8080/realms/mirl
+          jwk-set-uri: http://localhost:8080/realms/mirl/protocol/openid-connect/certs
+  servlet:
+    multipart:
+      max-file-size: 2MB
+      max-request-size: 2MB
+javax:
+  persistence:
+    jdbc:
+      url: ${MIRL_DB_URL}

@@ -1,0 +1,21 @@
+{
+	"folders": [
+		{
+			"path": "mirl-client"
+		},
+		{
+			"path": "mirl-client/src/views"
+		},
+		{
+			"path": "mirl-client/src/store"
+		},
+		{
+			"path": "mirl-client/src/components"
+		}
+	],
+	"settings": {
+		"yaml.schemas": {
+			"https://raw.githubusercontent.com/OAI/OpenAPI-Specification/main/schemas/v3.1/schema.json": "file:///home/user/projects/mirl/api/openapi-definition.yaml"
+		}
+	}
+}

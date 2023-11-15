@@ -6,8 +6,11 @@
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-4.6.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
     <changeSet id="1" author="Slobodian Sviatoslav">
         <sql>CREATE TYPE event_tpe AS ENUM ('public', 'private')</sql>
-        <createTable tableName="event">
-            <column name="id" type="int" autoIncrement="true">
+        <sql dbms="postgresql" endDelimiter=";">
+            CREATE SCHEMA mirl
+        </sql>
+        <createTable tableName="event" schemaName="mirl">
+            <column name="event_id" type="int" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="event_name" type="varchar(70)">
@@ -16,10 +19,7 @@
             <column name="event_type" type="event_tpe">
                 <constraints nullable="false"/>
             </column>
-            <column name="start_datetime" type="time with time zone">
-                <constraints nullable="false"/>
-            </column>
-            <column name="end_datetime" type="time with time zone">
+            <column name="description" type="text">
                 <constraints nullable="false"/>
             </column>
             <column name="photos" type="text[]">
@@ -28,7 +28,10 @@
             <column name="geolocation" type="point">
                 <constraints nullable="false"/>
             </column>
-            <column name="description" type="text">
+            <column name="start_datetime" type="time with time zone">
+                <constraints nullable="false"/>
+            </column>
+            <column name="end_datetime" type="time with time zone">
                 <constraints nullable="false"/>
             </column>
             <column name="created_at" type="datetime">
@@ -36,27 +39,70 @@
             </column>
             <column name="user_limit" type="int"/>
         </createTable>
-        <createTable tableName="user">
-            <column name="id" type="int" autoIncrement="true">
+    </changeSet>
+    <changeSet id="2" author="Slobodian Sviatoslav">
+        <sql>CREATE TYPE event_invitation_status AS ENUM ('PENDING', 'CONFIRMED', 'REFUSED')</sql>
+        <createTable tableName="event_invitation" schemaName="mirl">
+            <column name="invitation_id" type="int" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="full_name" type="varchar(80)">
+            <column name="created_at" type="datetime">
                 <constraints nullable="false"/>
             </column>
-            <column name="email" type="varchar(90)">
+            <column name="event_id" type="int">
                 <constraints nullable="false"/>
             </column>
-            <column name="email_confirmed" type="boolean">
+            <column name="user_id" type="int">
                 <constraints nullable="false"/>
             </column>
-            <column name="phone_number" type="varchar(16)">
+            <column name="invitation_status" type="event_invitation_status">
                 <constraints nullable="false"/>
             </column>
-            <column name="phone_number_confirmed" type="boolean">
-                <constraints nullable="false"/>
+            <column name="status_changes_at" type="datetime">
+                <constraints nullable="true"/>
             </column>
-            <column name="birthday" type="date"/>
-
         </createTable>
+        <sql>CREATE TYPE event_participation_request_status AS ENUM ('PENDING', 'CONFIRMED', 'REFUSED')</sql>
+        <createTable tableName="event_participation_request" schemaName="mirl">
+            <column name="invitation_id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="created_at" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+            <column name="event_id" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_id" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="request_status" type="event_participation_request_status">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status_changes_at" type="datetime">
+                <constraints nullable="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="3" author="Sviatoslav Slobodian">
+        <addColumn schemaName= "mirl"
+                   tableName="event">
+            <column name="owner_id"
+                    type="varchar(255)">
+                <constraints nullable="false" />
+            </column>
+            <column
+                    name="edited_at"
+                    type="datetime">
+            </column>
+        </addColumn>
+    </changeSet>
+    <changeSet id="4" author="Sviatoslav Slobodian">
+        <addColumn schemaName= "mirl"
+                   tableName="event">
+            <column name="address"
+                    type="varchar(512)">
+            </column>
+        </addColumn>
     </changeSet>
 </databaseChangeLog>

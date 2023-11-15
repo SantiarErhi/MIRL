@@ -21,6 +21,8 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: ultimatelysecure
+      TZ: GMT
+      PGTZ: GMT
     ports:
       - 8765:5433
     networks:
